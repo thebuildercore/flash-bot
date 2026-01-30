@@ -1,0 +1,105 @@
+~/flash-bot$ node bot.js
+ WICKGUARD - FINAL VERSION
+   Institutional-Grade Liquidation Protection
+
+📂 Wallet: CVYvELNx...
+ Balance: 4.78 SOL
+
+🏦 Initializing Assets on L1...
+✅ Minted 1,000 tokens
+📍 User ATA: 6azYrFSVvtSz51XZhV3J1zzxbYuccocrt2J2bPTTPv41
+📍 Safe ATA: 7CW7ZtSnidZPDSphTNiPm69VHoHeguq6cFtGUYVJW3Hs
+
+⚡ Delegating user account to Ephemeral Rollup...
+   ✅ User delegation successful!
+   📝 Tx: 3JDWux4a1J1nk2PkPhEyvktCWHmcJWxiaat6grw8uUNs4iFwXtqeAPcHRA8mfzWkmgWp2sFqoGnpjc1Mq9tKGmC8
+
+⚡ Delegating safe account to Ephemeral Rollup...
+   ✅ Safe delegation successful!
+   📝 Tx: 29LNWUJN29CFhM9A7fmsPMR4CPSfPvYVb35ZXEctQ6Sr69LaNYfG8jJtXEAdZzGyJaNwydcczGpCidWydujatvnL
+
+⏳ Waiting for L2 sync (15s)...
+
+💎 Verifying L2 state:
+   User ATA: 1000 tokens
+   Safe ATA: 0 tokens
+
+═══════════════════════════════════════════
+🛡️  WICKGUARD PROTECTION ACTIVE
+═══════════════════════════════════════════
+
+[7:00:18 AM] Price: $135.32 | Shield: ⚪ STANDBY | Rescues: 0   
+
+🚨 LIQUIDATION THRESHOLD BREACHED!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   📊 Protecting 1000 tokens...
+   ⚡ Executing atomic rescue on L2...
+   ✅ ASSETS SECURED ON L2!
+   ⚡ Execution: 2789ms (avg: 2789ms)
+   📝 Tx: 4AZURygYiezx5rDHTCi3dRXq8euq2YTEYrYbmmDiz84G1FcsF2NnGaHAN4b3ASz2eB5moDZAMC831voJ7Eb7swyJ
+   🔗 https://explorer.solana.com/tx/4AZURygYiezx5rDHTCi3dRXq8euq2YTEYrYbmmDiz84G1FcsF2NnGaHAN4b3ASz2eB5moDZAMC831voJ7Eb7swyJ?cluster=devnet
+   📊 Verified - User: 0 | Safe: 1000
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[7:00:27 AM] Price: $139.56 | Shield: 🟢 ACTIVE | Rescues: 1   
+
+📈 MARKET RECOVERY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   📊 Restoring 1000 tokens...
+   ✅ Position restored
+   📊 Final - User: 1000 | Safe: 0
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[7:00:31 AM] Price: $135.98 | Shield: ⚪ STANDBY | Rescues: 1   
+
+🚨 LIQUIDATION THRESHOLD BREACHED!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   📊 Protecting 1000 tokens...
+   ⚡ Executing atomic rescue on L2...
+   ✅ ASSETS SECURED ON L2!
+   ⚡ Execution: 2436ms (avg: 2613ms)
+   📝 Tx: 5GFN44d7AjoHNGQh69Xk3B2HubCsAu2DjAwbzL55scw37ujBYUHBotA9xKRzXLx2STsDvGy34TNfVTtdJSLWCZ2Y
+   🔗 https://explorer.solana.com/tx/5GFN44d7AjoHNGQh69Xk3B2HubCsAu2DjAwbzL55scw37ujBYUHBotA9xKRzXLx2STsDvGy34TNfVTtdJSLWCZ2Y?cluster=devnet
+   📊 Verified - User: 0 | Safe: 1000
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[7:00:39 AM] Price: $142.82 | Shield: 🟢 ACTIVE | Rescues: 2   
+
+📈 MARKET RECOVERY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+^C
+akshaya@LAPTOP-7AG4UK0V:~/flash-bot$ solana confirm -v 5GFN44d7AjoHNGQh69Xk3B2HubCsAu2DjAwbzL55scw37ujBYUHBotA9xKRzXLx2STsDvGy34TNfVTtdJSLWCZ2Y --url https://devnet-us.magicblock.app
+RPC URL: https://devnet-us.magicblock.app
+Default Signer Path: /home/akshaya/.config/solana/id.json
+Commitment: confirmed
+
+Transaction executed in slot 192057460:
+  Block Time: 2026-01-28T07:00:34+00:00
+  Version: 0
+  Recent Blockhash: FjZ3Sqvkpb3MywtbELXQJMkMgaxGrBrJAE8xXeiYo31H
+  Signature 0: 5GFN44d7AjoHNGQh69Xk3B2HubCsAu2DjAwbzL55scw37ujBYUHBotA9xKRzXLx2STsDvGy34TNfVTtdJSLWCZ2Y
+  Account 0: srw- CVYvELNxATtBTjhQ3pb1by4GGcVBt5xX9JQTtrnRrSvJ (fee payer)
+  Account 1: -rw- 6azYrFSVvtSz51XZhV3J1zzxbYuccocrt2J2bPTTPv41
+  Account 2: -rw- 7CW7ZtSnidZPDSphTNiPm69VHoHeguq6cFtGUYVJW3Hs
+  Account 3: -r-x TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA
+  Instruction 0
+    Program:   TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA (3)
+    Account 0: 6azYrFSVvtSz51XZhV3J1zzxbYuccocrt2J2bPTTPv41 (1)
+    Account 1: 7CW7ZtSnidZPDSphTNiPm69VHoHeguq6cFtGUYVJW3Hs (2)
+    Account 2: CVYvELNxATtBTjhQ3pb1by4GGcVBt5xX9JQTtrnRrSvJ (0)
+    Data: [3, 0, 202, 154, 59, 0, 0, 0, 0]
+  Status: Ok
+    Fee: ◎0
+    Account 0 balance: ◎4.75711088
+    Account 1 balance: ◎0.00203928
+    Account 2 balance: ◎0.00203928
+    Account 3 balance: ◎0.93442176
+  Compute Units Consumed: 4644
+  Log Messages:
+    Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [1]
+    Program log: Instruction: Transfer
+    Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 4644 of 200000 compute units
+    Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success
+
+Finalized
+XXXX:~/flash-bot$ 

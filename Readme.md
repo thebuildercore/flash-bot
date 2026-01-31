@@ -43,6 +43,7 @@ WickGuard utilizes a **Hybrid L1/L2 Model** powered by the MagicBlock Ephemeral 
 * **SDKs:** `@magicblock-labs/ephemeral-rollups-sdk`, `@solana/web3.js`
 
 ---
+See the terminal Ouput and solana Verfication of tx : https://github.com/thebuildercore/flash-bot/blob/main/output-log
 
 ## ⚙️ Setup & Installation
 

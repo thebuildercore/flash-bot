@@ -7,7 +7,7 @@ const {
 } = require("@solana/spl-token");
 
 // 1. IMPORT TRUTH FROM SDK
-// We trust the installed package, not online docs.
+
 const { DELEGATION_PROGRAM_ID } = require("@magicblock-labs/ephemeral-rollups-sdk");
 
 async function main() {

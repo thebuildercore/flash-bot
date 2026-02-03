@@ -92,9 +92,9 @@ yarn start  # Starts HJB-PID control loop
 
 ---
 
-## 📄 Research Paper
+##  Research Paper
 
-**[Read Full Technical Paper (PDF)](https://github.com/thebuildercore/flash-bot/blob/main/Technical_paper%20(2).pdf)**  
+**[Read Full Technical Paper (PDF)](https://github.com/thebuildercore/flash-bot/blob/main/Technical_paper%20(3).pdf)**  
 *"Speed: The Missing Layer in DeFi Solvency"* - February 2026
 
 **Core Contribution:**  

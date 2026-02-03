@@ -1,0 +1,131 @@
+
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm, amsfonts}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+% --- Code Styling ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstset{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,                 
+    numbers=left,                    
+    tabsize=2
+}
+
+\title{
+\textbf{Speed: The Missing Layer in DeFi Solvency}\\
+\large\textit{Low-Latency Hierarchical Control for Continuous Deleveraging}
+}
+
+
+%\author{Akshaya Krishna \\ \textit{ Mathematics 2nd Year, Founder}}
+\author{-Akshaya Krishna}
+\date{February 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We present a hierarchical control framework for proactive solvency management in DeFi. By solving an ergodic Hamilton-Jacobi-Bellman (HJB) objective, we derive a strategic deleveraging velocity that minimizes long-term market impact and inventory risk. This velocity is tracked by a discrete-time PID controller modified with derivative filtering and integral clamping. Implementation on MagicBlock Ephemeral Rollups ensures the low-latency execution required for high-frequency risk mitigation.
+\end{abstract}
+
+\textit{The proposed framework adapts established ergodic control formulations and standard PID tracking methods to DeFi solvency management via a hierarchical, low-latency execution architecture.}
+
+
+\section{Introduction}
+Current DeFi liquidation regimes suffer from a "Binary Trap," where insolvency triggers a zero-sum race between liquidators. We propose a "User Agent" model that operates in the pre-insolvency Yellow Zone ($1.0 < H < 1.05$), utilizing formal control theory to ensure smooth deleveraging.
+
+% \section{Strategic Layer: Ergodic HJB Formulation}
+\section{Strategic Layer: Ergodic HJB Formulation}
+\textit{We consider a reduced-order state representation in which the dominant risk variable is the position inventory $q$, while price dynamics and protocol parameters are assumed locally stationary within the Yellow Zone. This approximation is valid over short control horizons and allows tractable derivation of the optimal deleveraging policy.}
+
+\subsection{Objective Function}
+We define the state dynamics as $dq_t = -v_t \, dt$. The goal is to maximize the long-term average reward $\rho$:
+\begin{equation}
+\rho = \limsup_{T \to \infty} \frac{1}{T} \mathbb{E} \left[ \int_0^T \left( -\eta v_t^2 - \frac{1}{2}\gamma \sigma^2 q_t^2 \right) dt \right]
+\end{equation}
+The corresponding HJB equation is:
+\begin{equation}
+\rho + \max_v \left\{ - \eta v^2 - \frac{1}{2}\gamma \sigma^2 q^2 - v \frac{dV}{dq} \right\} = 0
+\end{equation}
+
+\subsection{Derivation of Optimal Velocity}
+Applying the first-order condition $\frac{\partial}{\partial v}: -2\eta v - \frac{dV}{dq} = 0$, we find:
+\begin{equation}
+v^*(q) = -\frac{1}{2\eta} \frac{dV}{dq}
+\end{equation}
+Assuming a quadratic value function $V(q) = Aq^2$ and solving for the stationary policy, the strategic target velocity simplifies to:
+\begin{equation}
+v^*(q) = \kappa q, \quad \kappa = \frac{\gamma \sigma^2}{2\eta}
+\end{equation}
+
+\section{Tactical Layer: PID Tracking Controller}
+\textit{Rather than directly enforcing a target solvency state, the solution of the ergodic HJB problem defines a desired deleveraging velocity, which is subsequently tracked by a lower-level controller. This hierarchical separation between strategic optimality and tactical execution is standard in high-frequency control systems.}
+
+\subsection{Controller Refinements}
+\textit{The discrete-time PID controller is employed as a practical tracking mechanism rather than a globally optimal solver. While a formal stability proof is beyond the scope of this work, boundedness is enforced via derivative filtering and integral clamping.}
+
+We define the velocity error as $e_k = v^*(q_k) - \hat{v}_k$. To manage oracle jitter, we implement a \textbf{Filtered Derivative}:
+\begin{equation}
+\tilde{e}_k = \alpha e_k + (1-\alpha)\tilde{e}_{k-1}, \quad D_k = K_D \frac{\tilde{e}_k - \tilde{e}_{k-1}}{\Delta t}
+\end{equation}
+
+To prevent catastrophic overflow during sustained stress, we implement \textbf{Anti-Windup} logic:
+\begin{equation}
+\dot{I} = \begin{cases} e_k, & 0 < u_k < u_{\max} \\ 0, & \text{otherwise} \end{cases}
+\end{equation}
+
+The final control output $u_k$ (the actuation signal to the rollup matching engine) is:
+\begin{equation}
+u_k = K_P e_k + K_I I_k + D_k
+\end{equation}
+
+
+
+\section{Implementation: MagicBlock SDK}
+The following Rust implementation highlights the bridge between the HJB strategic target and the PID tactical output.
+
+\begin{lstlisting}[language=Rust, caption=Hierarchical Control Implementation]
+#[ephemeral_function]
+pub fn step_control(ctx: Context<WickGuard>) -> Result<()> {
+    // 1. Strategic Handshake (HJB)
+    let v_star = kappa * ctx.accounts.position.inventory;
+
+    // 2. Error Calculation
+    let error = v_star - state.realized_velocity;
+
+    // 3. Tactical Filtered PID
+    state.filtered_error = ALPHA * error + (1.0 - ALPHA) * state.last_error;
+    let d_term = KD * (state.filtered_error - state.last_filtered_error) / DT;
+    
+    // Anti-windup check
+    if state.last_u < U_MAX { state.integral += KI * error * DT; }
+
+    let u_k = KP * error + state.integral + d_term;
+
+    // 4. Actuation
+    execute_rebalance(ctx, u_k)?;
+    Ok(())
+}
+\end{lstlisting}
+\section{Security and Risk Mitigation}
+The efficacy of a high-frequency control framework is fundamentally bounded by the quality of its inputs and the integrity of its execution environment. We identify two primary risk vectors and our corresponding mitigations.
+
+\subsection{Oracle-to-Rollup Parity}
+While the PID engine operates at sub-10ms intervals, it is subject to \textbf{Stale-Data Risk} if the external oracle (e.g., Pyth, Switchboard) fails to update during periods of extreme network congestion. In such scenarios, the derivative term $D_k$ approaches zero, effectively blinding the crash-detection mechanism. 
+
+\subsection{Non-Custodial Delegation}
+The use of an Ephemeral Rollup requires users to delegate rebalancing authority. To ensure security, WickGuard utilizes Program Derived Addresses (PDAs) with strictly scoped permissions. The "User Agent" is programmatically restricted to debt-repayment instructions; it possesses no "Withdraw" or "Transfer" authority, ensuring that collateral can only be exchanged for debt reduction within the parent lending protocol.
+\section{Conclusion}
+This framework provides a mathematically rigorous path from long-term ergodic optimality to real-time high-frequency execution. By separating strategy from tactics, WickGuard ensures that deleveraging is not only fast but economically efficient under the stated assumptions.
+
+\end{document}

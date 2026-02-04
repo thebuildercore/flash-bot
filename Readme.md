@@ -20,7 +20,8 @@ Traditional DeFi liquidation is **reactive** and **zero-sum**:
 **Result:** Catastrophic losses from execution latency, not bad positions.
 
 ---
-
+![WickGuard Architecture Diagram](./docs/diagram.png)
+---
 ##  The Solution: Speed as Solvency
 
 WickGuard operates in the **Yellow Zone** (1.0 < Health < 1.05) *before* insolvency, using:

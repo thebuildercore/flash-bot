@@ -129,7 +129,7 @@ Application of ergodic control theory to DeFi risk management with formal proof-
 ## 📚 References
 
 This implementation adapts established control theory methods:
-- **Ergodic Control:** Borkar & Meyn (2002), Atar & Budhiraja (2010)
+- **ERGODIC OPTIMAL LIQUIDATIONS IN DEFI:** JIALUN CAO1 AND DAVID ˇ SIˇ SKA1,2
 - **PID Tuning:** Åström & Hägglund (1995)
 
 ---

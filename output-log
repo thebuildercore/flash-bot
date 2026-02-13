@@ -1,105 +1,265 @@
-~/flash-bot$ node bot.js
- WICKGUARD - FINAL VERSION
-   Institutional-Grade Liquidation Protection
+// Runtime log of the bot - Maths from the paper implemented and working as planned
+╔════════════════════════════════════════════════════════════╗
+║      WICKGUARD BOT v2.1 - HJB + PID On rollup              ║
+║   Hierarchical Control with L2 Execution (MagicBlock)      ║
+╚════════════════════════════════════════════════════════════╝
 
-📂 Wallet: CVYvELNx...
- Balance: 4.78 SOL
+✅ Vault configuration loaded
+   Vault: GekZQCvohsC4...
+   Mint:  8fWh7DH7KBoW...
 
- Initializing Assets on L1...
- Minted 1,000 tokens
-  User ATA: 6azYrFSVvtSz51XZhV3J1zzxbYuccocrt2J2bPTTPv41
-  Safe ATA: 7CW7ZtSnidZPDSphTNiPm69VHoHeguq6cFtGUYVJW3Hs
+ Wallet: GFwjtPEB...
+ Balance: 4.96 SOL
 
- Delegating user account to Ephemeral Rollup...
-   ✅ User delegation successful!
-   📝 Tx: 3JDWux4a1J1nk2PkPhEyvktCWHmcJWxiaat6grw8uUNs4iFwXtqeAPcHRA8mfzWkmgWp2sFqoGnpjc1Mq9tKGmC8
+ Setting up user token account...
+✅ User ATA: 7odNWNkLmMFj...
 
- Delegating safe account to Ephemeral Rollup...
-   ✅ Safe delegation successful!
-   📝 Tx: 29LNWUJN29CFhM9A7fmsPMR4CPSfPvYVb35ZXEctQ6Sr69LaNYfG8jJtXEAdZzGyJaNwydcczGpCidWydujatvnL
+ Minting collateral tokens...
+   Current balance: 1000 tokens
+✅ Already have 1000 tokens
+
+ Delegating user account to L2...
+   Delegating: 1000 tokens
+✅ User already delegated
 
 ⏳ Waiting for L2 sync (15s)...
 
-💎 Verifying L2 state:
-   User ATA: 1000 tokens
-   Safe ATA: 0 tokens
+  Initializing Anti-Wick Protection...
+─────────────────────────────────────────
+ Strategic Parameters (HJB - Equation 4):
+   γ (gamma) = 4.00 - risk aversion
+   σ (sigma) = 0.080 - volatility (tuned for Solana)
+   η (eta)   = 0.50 - market impact
+   κ (kappa) = 0.025600 - deleveraging sensitivity
 
-═══════════════════════════════════════════
-🛡️  WICKGUARD PROTECTION ACTIVE
-═══════════════════════════════════════════
+  Tactical Parameters (PID - Equation 7):
+   K_P = 1.00 - proportional gain
+   K_I = 0.05 - integral gain
+   K_D = 0.08 - derivative gain
 
-[7:00:18 AM] Price: $135.32 | Shield: ⚪ STANDBY | Rescues: 0   
+🛡️  Anti-Wick Protection:
+   Grace Period: 15 checks (3s)
+   Price EMA α: 0.3 (filters wicks)
+   Yellow Zone: H < 1.15
+   Danger Zone: H < 1.1 (triggers action)
 
-🚨 LIQUIDATION THRESHOLD BREACHED!
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   📊 Protecting 1000 tokens...
-   ⚡ Executing atomic rescue on L2...
-   ✅ ASSETS SECURED ON L2!
-   ⚡ Execution: 2789ms (avg: 2789ms)
-   📝 Tx: 4AZURygYiezx5rDHTCi3dRXq8euq2YTEYrYbmmDiz84G1FcsF2NnGaHAN4b3ASz2eB5moDZAMC831voJ7Eb7swyJ
-   🔗 https://explorer.solana.com/tx/4AZURygYiezx5rDHTCi3dRXq8euq2YTEYrYbmmDiz84G1FcsF2NnGaHAN4b3ASz2eB5moDZAMC831voJ7Eb7swyJ?cluster=devnet
-   📊 Verified - User: 0 | Safe: 1000
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Position:
+   Collateral: 1000 tokens
+   Debt: $92,000
+   Initial H: 1.217
+   Vault: Connected ✅
+─────────────────────────────────────────
 
-[7:00:27 AM] Price: $139.56 | Shield: 🟢 ACTIVE | Rescues: 1   
+╔════════════════════════════════════════════════════════════╗
+║         🛡️  WICKGUARD ANTI-WICK PROTECTION ACTIVE          ║
+╚════════════════════════════════════════════════════════════╝
 
-📈 MARKET RECOVERY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   📊 Restoring 1000 tokens...
-   ✅ Position restored
-   📊 Final - User: 1000 | Safe: 0
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Crash Simulation Timeline:
+   0-30s:  Normal volatility (±$3)
+   30-35s: Quick WICK ($140→$128→$142) ⚡ Should be FILTERED
+   35-40s: Brief recovery
+   40-60s: SUSTAINED CRASH ($140→$127) 💥 Should TRIGGER
+   60-70s: Stabilization
+   70s+:   Recovery
 
-[7:00:31 AM] Price: $135.98 | Shield: ⚪ STANDBY | Rescues: 1   
+[5:44:18 PM] 🟢 NORMAL     | $139.32 | H: 1.212 | Debt: $92,000 | 🟢 SAFE | Repayments: 0 | Wicks: 0    Repayments: 0 | Wicks: 0   
+[5:44:49 PM] ⚡ WICK       | Raw: $136.40 (-1.4%) → EMA: $138.30 | H: 1.203 | Debt: $92,000 | 🟢 SAFE | Repayments: 0 | Wicks: 0   
+[5:44:52 PM] ⚡ WICK       | Raw: $131.73 (+0.8%) → EMA: $130.73 | H: 1.137 | Debt: $92,000 | 🟡 YELLOW | Repayments: 0 | Wicks: 0   
+[5:44:54 PM] 📈 RECOVERY   | Raw: $142.11 (+1.2%) → EMA: $140.43 | H: 1.221 | Debt: $92,000 | 🟢 SAFE | Repayments: 0 | Wicks: 0     
+[5:45:00 PM] 💥 CRASH      | $139.26 | H: 1.211 | Debt: $92,000 | 🟢 SAFE | Repayments: 0 | Wicks: 0    Repayments: 0 | Wicks: 0   
+[5:45:03 PM] 💥 CRASH      | $135.61 | H: 1.179 | Debt: $92,000 | 🟢 SAFE | Repayments: 0 | Wicks: 0   
+[5:45:06 PM] 💥 CRASH      | $131.62 | H: 1.145 | Debt: $92,000 | 🟡 YELLOW | Repayments: 0 | Wicks: 0   
+[5:45:13 PM] 💥 CRASH      | $126.79 | H: 1.103 | Debt: $92,000 | 🟡 YELLOW | Repayments: 0 | Wicks: 0    Repayments: 0 | Wicks: 0   
+[5:45:14 PM] ⏳ GRACE PERIOD 8/15 | Raw: $124.45 (-0.4%) | EMA: $125.00 | H: 1.087 | Vol: 0.5%   ks: 0   
+[5:45:15 PM] ⏳ GRACE PERIOD 10/15 | Raw: $123.99 (-0.3%) | EMA: $124.42 | H: 1.082 | Vol: 0.5%   s: 0   
+[5:45:16 PM] 💥 CRASH      | $122.90 | H: 1.069 | Debt: $92,000 | 🔴 DANGER | Repayments: 0 | Wicks: 0   
 
-🚨 LIQUIDATION THRESHOLD BREACHED!
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   📊 Protecting 1000 tokens...
-   ⚡ Executing atomic rescue on L2...
-   ✅ ASSETS SECURED ON L2!
-   ⚡ Execution: 2436ms (avg: 2613ms)
-   📝 Tx: 5GFN44d7AjoHNGQh69Xk3B2HubCsAu2DjAwbzL55scw37ujBYUHBotA9xKRzXLx2STsDvGy34TNfVTtdJSLWCZ2Y
-   🔗 https://explorer.solana.com/tx/5GFN44d7AjoHNGQh69Xk3B2HubCsAu2DjAwbzL55scw37ujBYUHBotA9xKRzXLx2STsDvGy34TNfVTtdJSLWCZ2Y?cluster=devnet
-   📊 Verified - User: 0 | Safe: 1000
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔴 DANGER ZONE - Grace Period Expired!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Price sustained below H=1.1 for 3s
+   Activating continuous hierarchical control
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-[7:00:39 AM] Price: $142.82 | Shield: 🟢 ACTIVE | Rescues: 2   
+   📊 Control Iteration #1
+   ├─ Price: Raw $122.09 → Smoothed $122.90
+   ├─ Volatility: 0.74%
+   ├─ Strategic (HJB): v* = 0.025551 (target velocity)
+   ├─ Tactical (PID):  u_k = 0.0327 (control signal)
+   ├─ Velocity Error: 0.025551
+   └─ Integral State: 0.0000
 
-📈 MARKET RECOVERY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-^C
-akshaya@LAPTOP-7AG4UK0V:~/flash-bot$ solana confirm -v 5GFN44d7AjoHNGQh69Xk3B2HubCsAu2DjAwbzL55scw37ujBYUHBotA9xKRzXLx2STsDvGy34TNfVTtdJSLWCZ2Y --url https://devnet-us.magicblock.app
-RPC URL: https://devnet-us.magicblock.app
-Default Signer Path: /home/akshaya/.config/solana/id.json
-Commitment: confirmed
 
-Transaction executed in slot 192057460:
-  Block Time: 2026-01-28T07:00:34+00:00
-  Version: 0
-  Recent Blockhash: FjZ3Sqvkpb3MywtbELXQJMkMgaxGrBrJAE8xXeiYo31H
-  Signature 0: 5GFN44d7AjoHNGQh69Xk3B2HubCsAu2DjAwbzL55scw37ujBYUHBotA9xKRzXLx2STsDvGy34TNfVTtdJSLWCZ2Y
-  Account 0: srw- CVYvELNxATtBTjhQ3pb1by4GGcVBt5xX9JQTtrnRrSvJ (fee payer)
-  Account 1: -rw- 6azYrFSVvtSz51XZhV3J1zzxbYuccocrt2J2bPTTPv41
-  Account 2: -rw- 7CW7ZtSnidZPDSphTNiPm69VHoHeguq6cFtGUYVJW3Hs
-  Account 3: -r-x TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA
-  Instruction 0
-    Program:   TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA (3)
-    Account 0: 6azYrFSVvtSz51XZhV3J1zzxbYuccocrt2J2bPTTPv41 (1)
-    Account 1: 7CW7ZtSnidZPDSphTNiPm69VHoHeguq6cFtGUYVJW3Hs (2)
-    Account 2: CVYvELNxATtBTjhQ3pb1by4GGcVBt5xX9JQTtrnRrSvJ (0)
-    Data: [3, 0, 202, 154, 59, 0, 0, 0, 0]
-  Status: Ok
-    Fee: ◎0
-    Account 0 balance: ◎4.75711088
-    Account 1 balance: ◎0.00203928
-    Account 2 balance: ◎0.00203928
-    Account 3 balance: ◎0.93442176
-  Compute Units Consumed: 4644
-  Log Messages:
-    Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [1]
-    Program log: Instruction: Transfer
-    Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 4644 of 200000 compute units
-    Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success
+   ⚡ Executing L2 Repayment (MEV Protected):
+   ├─ Signal: 3.271%
+   ├─ Sell: 21.219 tokens
+   ├─ Price Used: $122.90 (EMA, not wick)
+   ├─ Proceeds: $2607.84
+   └─ Target: Vault
 
-Finalized
-XXXX:~/flash-bot$ 
+   ✅ REPAYMENT COMPLETE (L2)
+   ├─ Execution: 1709ms (MEV protected)
+   ├─ Debt reduced: $2607.84
+   ├─ New H: 1.077
+   ├─ Remaining Debt: $89,392.156
+   └─ Tx: 57K3va5Nn3mcunsAtF5a...
+   📊 L2 State - User: 627.572517 | Vault: 372.427483
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[5:45:18 PM] 💥 CRASH      | $122.63 | H: 1.074 | Debt: $89,392 | 🔴 DANGER | Repayments: 1 | Wicks: 0   
+   📊 Control Iteration #2
+   ├─ Price: Raw $122.00 → Smoothed $122.63
+   ├─ Volatility: 0.76%
+   ├─ Strategic (HJB): v* = 0.025421 (target velocity)
+   ├─ Tactical (PID):  u_k = 0.0287 (control signal)
+   ├─ Velocity Error: 0.025421
+   └─ Integral State: 0.0003
+
+   ⚡ Executing L2 Repayment (MEV Protected):
+   ├─ Signal: 2.870%
+   ├─ Sell: 18.014 tokens
+   ├─ Price Used: $122.63 (EMA, not wick)
+   ├─ Proceeds: $2209.12
+   └─ Target: Vault
+
+   ✅ REPAYMENT COMPLETE (L2)
+   ├─ Execution: 1046ms (MEV protected)
+   ├─ Debt reduced: $2209.12
+   ├─ New H: 1.081
+   ├─ Remaining Debt: $87,183.034
+   └─ Tx: 2ieEySZTqfFaVz3yN1tH...
+   📊 L2 State - User: 609.558236 | Vault: 390.441764
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[5:45:20 PM] 💥 CRASH      | $122.49 | H: 1.080 | Debt: $87,183 | 🔴 DANGER | Repayments: 2 | Wicks: 0   
+   📊 Control Iteration #3
+   ├─ Price: Raw $122.17 → Smoothed $122.49
+   ├─ Volatility: 0.66%
+   ├─ Strategic (HJB): v* = 0.025286 (target velocity)
+   ├─ Tactical (PID):  u_k = 0.0257 (control signal)
+   ├─ Velocity Error: 0.025286
+   └─ Integral State: 0.0005
+
+   ⚡ Executing L2 Repayment (MEV Protected):
+   ├─ Signal: 2.574%
+   ├─ Sell: 15.690 tokens
+   ├─ Price Used: $122.49 (EMA, not wick)
+   ├─ Proceeds: $1921.90
+   └─ Target: Vault
+
+   ✅ REPAYMENT COMPLETE (L2)
+   ├─ Execution: 854ms (MEV protected)
+   ├─ Debt reduced: $1921.90
+   ├─ New H: 1.086
+   ├─ Remaining Debt: $85,261.135
+   └─ Tx: 2UktUnG5aUU7USerdtHY...
+   📊 L2 State - User: 593.868456 | Vault: 406.131544
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[5:45:22 PM] 💥 CRASH      | $122.34 | H: 1.085 | Debt: $85,261 | 🔴 DANGER | Repayments: 3 | Wicks: 0   
+   📊 Control Iteration #4
+   ├─ Price: Raw $121.98 → Smoothed $122.34
+   ├─ Volatility: 0.58%
+   ├─ Strategic (HJB): v* = 0.025171 (target velocity)
+   ├─ Tactical (PID):  u_k = 0.0259 (control signal)
+   ├─ Velocity Error: 0.025171
+   └─ Integral State: 0.0008
+
+   ⚡ Executing L2 Repayment (MEV Protected):
+   ├─ Signal: 2.588%
+   ├─ Sell: 15.370 tokens
+   ├─ Price Used: $122.34 (EMA, not wick)
+   ├─ Proceeds: $1880.36
+   └─ Target: Vault
+
+   ✅ REPAYMENT COMPLETE (L2)
+   ├─ Execution: 760ms (MEV protected)
+   ├─ Debt reduced: $1880.36
+   ├─ New H: 1.091
+   ├─ Remaining Debt: $83,380.779
+   └─ Tx: 3NMBCUKPoL1RgH9LJLoc...
+   📊 L2 State - User: 578.498329 | Vault: 421.501671
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[5:45:24 PM] 💥 CRASH      | $122.02 | H: 1.088 | Debt: $83,380 | 🔴 DANGER | Repayments: 4 | Wicks: 0   
+   📊 Control Iteration #5
+   ├─ Price: Raw $121.29 → Smoothed $122.02
+   ├─ Volatility: 0.63%
+   ├─ Strategic (HJB): v* = 0.025087 (target velocity)
+   ├─ Tactical (PID):  u_k = 0.0261 (control signal)
+   ├─ Velocity Error: 0.025087
+   └─ Integral State: 0.0010
+
+   ⚡ Executing L2 Repayment (MEV Protected):
+   ├─ Signal: 2.606%
+   ├─ Sell: 15.075 tokens
+   ├─ Price Used: $122.02 (EMA, not wick)
+   ├─ Proceeds: $1839.57
+   └─ Target: Vault
+
+   ✅ REPAYMENT COMPLETE (L2)
+   ├─ Execution: 950ms (MEV protected)
+   ├─ Debt reduced: $1839.57
+   ├─ New H: 1.095
+   ├─ Remaining Debt: $81,541.208
+   └─ Tx: 2nxfCEvKjGPhy28JYvt8...
+   📊 L2 State - User: 563.422862 | Vault: 436.577138
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[5:45:26 PM] 💥 CRASH      | $121.84 | H: 1.093 | Debt: $81,541 | 🔴 DANGER | Repayments: 5 | Wicks: 0   
+   📊 Control Iteration #6
+   ├─ Price: Raw $121.41 → Smoothed $121.84
+   ├─ Volatility: 0.55%
+   ├─ Strategic (HJB): v* = 0.024976 (target velocity)
+   ├─ Tactical (PID):  u_k = 0.0262 (control signal)
+   ├─ Velocity Error: 0.024976
+   └─ Integral State: 0.0013
+
+   ⚡ Executing L2 Repayment (MEV Protected):
+   ├─ Signal: 2.619%
+   ├─ Sell: 14.758 tokens
+   ├─ Price Used: $121.84 (EMA, not wick)
+   ├─ Proceeds: $1798.15
+   └─ Target: Vault
+
+   ✅ REPAYMENT COMPLETE (L2)
+   ├─ Execution: 1044ms (MEV protected)
+   ├─ Debt reduced: $1798.15
+   ├─ New H: 1.100
+   ├─ Remaining Debt: $79,743.061
+   └─ Tx: 4VYhD5F6drywscLkyjfx...
+   📊 L2 State - User: 548.664704 | Vault: 451.335296
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[5:45:28 PM] 💥 CRASH      | $121.62 | H: 1.098 | Debt: $79,743 | 🔴 DANGER | Repayments: 6 | Wicks: 0   
+   📊 Control Iteration #7
+   ├─ Price: Raw $121.10 → Smoothed $121.62
+   ├─ Volatility: 0.55%
+   ├─ Strategic (HJB): v* = 0.024871 (target velocity)
+   ├─ Tactical (PID):  u_k = 0.0263 (control signal)
+   ├─ Velocity Error: 0.024871
+   └─ Integral State: 0.0015
+
+   ⚡ Executing L2 Repayment (MEV Protected):
+   ├─ Signal: 2.634%
+   ├─ Sell: 14.450 tokens
+   ├─ Price Used: $121.62 (EMA, not wick)
+   ├─ Proceeds: $1757.36
+   └─ Target: Vault
+
+   ✅ REPAYMENT COMPLETE (L2)
+   ├─ Execution: 1048ms (MEV protected)
+   ├─ Debt reduced: $1757.36
+   ├─ New H: 1.105
+   ├─ Remaining Debt: $77,985.702
+   └─ Tx: 2KG9pFMy2yV1YxSfedZY...
+   📊 L2 State - User: 534.214932 | Vault: 465.785068
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[5:45:30 PM] 💥 CRASH      | $121.34 | H: 1.102 | Debt: $77,985 | 🟡 YELLOW | Repayments: 7 | Wicks: 0   
+
+✅ EXITED DANGER ZONE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Control iterations: 7
+   Repayments executed: 7
+   Total debt repaid: $14014.30
+   Wicks avoided: 0 ✅
+   Avg control signal: 0.0274
+   Final health factor: 1.102
+   Status: Position SAVED! 🎉
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[5:45:32 PM] ⏳ GRACE PERIOD 8/15 | Raw: $118.44 (-0.6%) | EMA: $119.20 | H: 1.083 | Vol: 0.6%   ^C: 0   
+akshaya@LAPTOP-7AG4UK0V:~/wickguard-bot$ 

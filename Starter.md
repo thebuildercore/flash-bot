@@ -1,4 +1,4 @@
-# 🚀 WICKGUARD - COMPLETE STARTUP GUIDE
+#  WICKGUARD - COMPLETE STARTUP GUIDE
 
 ## You've Fixed the Segfault! ✅
 

@@ -1,27 +1,23 @@
 {
-  "name": "flash-bot",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "wickguard-bot",
+  "version": "2.0.0",
+  "description": "WickGuard L2 Protection Bot with Vault",
+  "main": "bot.js",
+  "directories": {
+    "doc": "docs"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "bot": "node bot.js",
+    "vault": "node vault.js",
+    "test": "echo \"No tests specified\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@magicblock-labs/ephemeral-rollups-sdk": "^0.8.3",
-    "@solana/spl-token": "^0.3.11",
-    "@solana/wallet-adapter-react": "^0.15.39",
-    "@solana/wallet-adapter-react-ui": "^0.9.39",
-    "@solana/wallet-adapter-wallets": "^0.19.37",
-    "@solana/web3.js": "^1.98.4",
-    "clsx": "^2.1.1",
-    "framer-motion": "^12.29.2",
-    "lucide-react": "^0.563.0",
-    "magic-router-sdk": "^1.0.10",
-    "socket.io": "^4.8.3",
-    "socket.io-client": "^4.8.3",
-    "tailwind-merge": "^3.4.0"
+    "@magicblock-labs/ephemeral-rollups-sdk": "^0.8.5",
+    "@solana/spl-token": "^0.4.0",
+    "@solana/web3.js": "^1.87.6",
+    "cross-fetch": "^4.0.0"
   }
 }

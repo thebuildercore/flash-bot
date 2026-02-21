@@ -88,7 +88,7 @@ export function DashboardSidebar() {
           <span className="font-medium text-sm">Disconnect</span>
         </button>
         <div className="text-xs text-sidebar-foreground/50 px-4 py-2">
-          <p>v0.1.0</p>
+          <p>Akshaya Krishna</p>
         </div>
       </div>
     </aside>

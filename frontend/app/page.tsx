@@ -122,9 +122,20 @@ export default function LandingPage() {
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition" />
               </Button>
             </Link>
+            <Link href = "https://drive.google.com/file/d/1cclYtWghTHckaHXYo5hovb2lKjR0MjOC/view?usp=sharing">
             <Button size="lg" variant="outline" className="border-primary/30 hover:border-primary/50 hover:bg-primary/5">
-              View Demo
+              View Demo (V 1.0)
             </Button>
+            </Link>
+             <a
+    href="https://x.com/flash__bot?s=09"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <Button size="lg" className="bg-primary hover:bg-primary/90">
+      Join Waitlist
+    </Button>
+  </a>
           </div>
 
           {/* Stats Row */}
